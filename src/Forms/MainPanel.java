@@ -680,7 +680,7 @@ public class MainPanel extends javax.swing.JPanel {
              query = "SELECT BLNumber FROM "+PropertiesClass.props.DB_NAME+".Transports a, "+PropertiesClass.props.DB_NAME+".Status b WHERE a.Status_ID=b.ID AND (b.DataName='Opened' OR b.DataName='AC' OR b.DataName='Reopened');";
             }break;
             case 4:{ //Impex=4
-             query = "SELECT BLNumber FROM "+PropertiesClass.props.DB_NAME+".Transports a, "+PropertiesClass.props.DB_NAME+".Status b WHERE a.Status_ID=b.ID AND (b.DataName='Opened' OR b.DataName='Completed' OR b.DataName='Rejected' OR b.DataName='Correct' OR b.DataName='Archived' OR b.DataName='AC' OR b.DataName='Reopened');";
+             query = "SELECT BLNumber FROM "+PropertiesClass.props.DB_NAME+".Transports a, "+PropertiesClass.props.DB_NAME+".Status b WHERE a.Status_ID=b.ID AND (b.DataName='Opened' OR b.DataName='Completed' OR b.DataName='Rejected' OR b.DataName='Correct' OR b.DataName='Archived' OR b.DataName='AC' OR b.DataName='Reopened' OR b.DataName='Notified');";
             }break;
             case 5:{ //Customs Agency=5
              //ver.1.01 Customs Agency must see all types of events -- 28.08.2014  
@@ -732,7 +732,7 @@ public class MainPanel extends javax.swing.JPanel {
              query = "SELECT BLNumber FROM "+PropertiesClass.props.DB_NAME+".Transports a, "+PropertiesClass.props.DB_NAME+".Status b WHERE a.Status_ID=b.ID AND (b.DataName='Opened' OR b.DataName='AC' OR b.DataName='Reopened') AND a.`BLNumber` LIKE '"+filterString+"%' ;";
             }break;
             case 4:{ //Impex=4
-             query = "SELECT BLNumber FROM "+PropertiesClass.props.DB_NAME+".Transports a, "+PropertiesClass.props.DB_NAME+".Status b WHERE a.Status_ID=b.ID AND (b.DataName='Opened' OR b.DataName='Completed' OR b.DataName='Rejected' OR b.DataName='Correct' OR b.DataName='Archived' OR b.DataName='AC' OR b.DataName='Reopened') AND a.`BLNumber` LIKE '"+filterString+"%' ;";
+             query = "SELECT BLNumber FROM "+PropertiesClass.props.DB_NAME+".Transports a, "+PropertiesClass.props.DB_NAME+".Status b WHERE a.Status_ID=b.ID AND (b.DataName='Opened' OR b.DataName='Completed' OR b.DataName='Rejected' OR b.DataName='Correct' OR b.DataName='Archived' OR b.DataName='AC' OR b.DataName='Reopened' OR b.DataName='Notified') AND a.`BLNumber` LIKE '"+filterString+"%' ;";
             }break;
             case 5:{ //Customs Agency=5
              //ver.1.01 Customs Agency must see all types of events -- 28.08.2014
