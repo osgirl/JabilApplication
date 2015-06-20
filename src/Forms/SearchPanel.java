@@ -500,7 +500,7 @@ public class SearchPanel extends javax.swing.JPanel {
                 for(int i=0;i<eventNames.length;i++){
                     String query = "SELECT t.BLNumber, t.PONumber,t.UpdatedBy, t.UpdatedDate, u.Login, v.DataName, c.DataName, s.DataName FROM "+PropertiesClass.props.DB_NAME+".Transports t,"+PropertiesClass.props.DB_NAME+".User u,"+PropertiesClass.props.DB_NAME+".Vendor v,"+PropertiesClass.props.DB_NAME+".Carrier c, "+PropertiesClass.props.DB_NAME+".Status s WHERE t.Buyer_ID = u.ID AND t.Vendor_ID=v.ID AND t.Carrier_ID=c.ID AND t.Status_ID=s.ID AND t.BLNumber = '"+eventNames[i]+"';";
                     String[] vendorDetails = sqlConnector.getQueryFirstRow(query,8);
-                    bw.write(vendorDetails[0]+";"+vendorDetails[1]+";"+vendorDetails[5]+";"+vendorDetails[6]+";"+vendorDetails[4]);
+                    bw.write(vendorDetails[0]+";"+vendorDetails[1]+";"+vendorDetails[5]+";"+vendorDetails[6]+";"+vendorDetails[4]+";"+vendorDetails[7]);
                     bw.newLine(); 
                 }
                 if (bw != null) {
