@@ -160,6 +160,19 @@ public class EventStatusPanel extends javax.swing.JPanel {
         //AC=6
         //Reopened=7
         //Notified=8
+        if(userGroup.contentEquals("Admin"))
+        {
+          comboModel.addElement("Opened");
+          comboModel.addElement("Completed");
+          comboModel.addElement("Rejected");
+          comboModel.addElement("Archived");
+          comboModel.addElement("Correct");
+          comboModel.addElement("AC");
+          comboModel.addElement("Reopened");
+          comboModel.addElement("Notified");   
+        }
+        else
+        {
         switch(statusValue){
             //Created
             case 0: comboModel.addElement("Opened");break;
@@ -200,6 +213,7 @@ public class EventStatusPanel extends javax.swing.JPanel {
             case 8 : {
                 if(userGroup.contentEquals("Buyer"))comboModel.addElement("Completed"); 
             }break;
+        }
         }
         jComboBox1.setModel(comboModel);
         
