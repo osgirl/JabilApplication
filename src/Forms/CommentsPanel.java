@@ -171,12 +171,16 @@ public class CommentsPanel extends javax.swing.JPanel {
     private void addCommentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCommentButtonActionPerformed
     String query = "SELECT a.`E-mail` FROM "+PropertiesClass.props.DB_NAME+".User a WHERE Login='"+MainPanel.mainPanel.userLogin+"';";
         String updatedBy = sqlConnector.getQueryFirstElement(query);
-        String comment = updatedBy+": "+jTextArea1.getText();                
+        String comment = updatedBy+": "+jTextArea1.getText();
+        if ( comment.length() < 512)
+        {
         sqlConnector.addCommentToTable(comment,MainPanel.mainPanel.userLogin,selectedEventID);
-        JOptionPane.showMessageDialog(this, "Label added.");      
+        JOptionPane.showMessageDialog(this, "Comment added.");      
         commentsPanel.setVisible(false);
         parentPanel.setVisible(true);
-        MainPanel.mainPanel.refreshItemList();    
+        MainPanel.mainPanel.refreshItemList();
+        }
+        else JOptionPane.showMessageDialog(this, "Comment is too long! Try again with shorter message.");
     }//GEN-LAST:event_addCommentButtonActionPerformed
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
