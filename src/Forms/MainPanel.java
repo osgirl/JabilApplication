@@ -11,6 +11,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -119,6 +120,7 @@ public class MainPanel extends javax.swing.JPanel {
         jLabel14 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        deleteEventButton = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(1024, 800));
         setMinimumSize(new java.awt.Dimension(800, 600));
@@ -290,6 +292,13 @@ public class MainPanel extends javax.swing.JPanel {
         jTextArea1.setRows(5);
         jScrollPane2.setViewportView(jTextArea1);
 
+        deleteEventButton.setText("Delete Event");
+        deleteEventButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteEventButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -297,7 +306,9 @@ public class MainPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(logoLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(77, 77, 77)
+                        .addComponent(logoLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(eventDocumentsButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(newEventButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(eventStatusButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -310,7 +321,8 @@ public class MainPanel extends javax.swing.JPanel {
                     .addComponent(searchButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(logoutButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(changePassButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(eventCommentsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(eventCommentsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(deleteEventButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -372,18 +384,6 @@ public class MainPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(logoLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(newEventButton)
-                            .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(eventDocumentsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(eventCommentsButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(eventStatusButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -394,8 +394,22 @@ public class MainPanel extends javax.swing.JPanel {
                         .addGap(2, 2, 2)
                         .addComponent(RefreshButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(23, 23, 23)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(logoLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(newEventButton)
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(eventDocumentsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(eventCommentsButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(eventStatusButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deleteEventButton)))
+                .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(vendorButton)
@@ -483,6 +497,7 @@ public class MainPanel extends javax.swing.JPanel {
             statusesButton.setVisible(false);
             groupsButton.setVisible(false);
             usersButton.setVisible(false);
+            deleteEventButton.setVisible(false);
             //eventStatusButton.setVisible(false);
             }break;
             case 2:{ //Vendor=2
@@ -493,6 +508,7 @@ public class MainPanel extends javax.swing.JPanel {
             groupsButton.setVisible(false);
             usersButton.setVisible(false);
             eventStatusButton.setVisible(false);
+            deleteEventButton.setVisible(false);
             }break;
             case 3:{ //PU=3
             newEventButton.setVisible(false);
@@ -502,6 +518,7 @@ public class MainPanel extends javax.swing.JPanel {
             groupsButton.setVisible(false);
             usersButton.setVisible(false);
             eventStatusButton.setVisible(false);
+            deleteEventButton.setVisible(false);
             }break;
             case 4:{ //Impex=4
             newEventButton.setVisible(false);
@@ -510,6 +527,7 @@ public class MainPanel extends javax.swing.JPanel {
             statusesButton.setVisible(false);
             groupsButton.setVisible(false);
             usersButton.setVisible(false);
+            deleteEventButton.setVisible(false);
             //eventStatusButton.setVisible(false);
             }break;
             case 5:{ //Customs Agency=5
@@ -519,6 +537,7 @@ public class MainPanel extends javax.swing.JPanel {
             statusesButton.setVisible(false);
             groupsButton.setVisible(false);
             usersButton.setVisible(false);
+            deleteEventButton.setVisible(false);
             //eventStatusButton.setVisible(false);
             }break;
             case 6:{ //Transport=6
@@ -528,6 +547,7 @@ public class MainPanel extends javax.swing.JPanel {
             groupsButton.setVisible(false);
             usersButton.setVisible(false);
             eventStatusButton.setVisible(false);
+            deleteEventButton.setVisible(false);
             }break;
             case 7:{ //Courier=7
             vendorButton.setVisible(false);
@@ -535,6 +555,7 @@ public class MainPanel extends javax.swing.JPanel {
             statusesButton.setVisible(false);
             groupsButton.setVisible(false);
             usersButton.setVisible(false);
+            deleteEventButton.setVisible(false);
             //eventStatusButton.setVisible(false);
             }break;
             default:{
@@ -545,6 +566,7 @@ public class MainPanel extends javax.swing.JPanel {
             groupsButton.setVisible(false);
             usersButton.setVisible(false);
             eventStatusButton.setVisible(false);
+            deleteEventButton.setVisible(false);
             }break;
         }
     }
@@ -583,6 +605,7 @@ public class MainPanel extends javax.swing.JPanel {
             eventDocumentsButton.setEnabled(false);
             eventCommentsButton.setEnabled(false);
             eventStatusButton.setEnabled(false);
+            deleteEventButton.setEnabled(false);
             logsButton.setEnabled(false);
 
         } else {
@@ -590,8 +613,9 @@ public class MainPanel extends javax.swing.JPanel {
             eventDocumentsButton.setEnabled(true);
             eventCommentsButton.setEnabled(true);
             eventStatusButton.setEnabled(true);
+            deleteEventButton.setEnabled(true);
             logsButton.setEnabled(true);
-             loadItemDetails(selectedIndex);
+            loadItemDetails(selectedIndex);
         }
        }
     }//GEN-LAST:event_jList1ValueChanged
@@ -648,7 +672,7 @@ public class MainPanel extends javax.swing.JPanel {
     private void changePassButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePassButtonActionPerformed
         ChangePassPanel cpPanel= new ChangePassPanel(userLogin);
         Classes.CDSApplet.cdsApplet.add(cpPanel);
-         MainPanel.mainPanel.setVisible(false);
+        MainPanel.mainPanel.setVisible(false);
     }//GEN-LAST:event_changePassButtonActionPerformed
 
     private void RefreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshButtonActionPerformed
@@ -663,6 +687,16 @@ public class MainPanel extends javax.swing.JPanel {
          MainPanel.mainPanel.setVisible(false);
          cPanel.refreshCommentsList();
     }//GEN-LAST:event_eventCommentsButtonActionPerformed
+
+    private void deleteEventButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteEventButtonActionPerformed
+        String selectedEvent = jList1.getSelectedValue().toString();
+        String query = "SELECT ID FROM "+PropertiesClass.props.DB_NAME+".Transports WHERE BLNumber='"+selectedEvent+"'";
+        int transportID = Integer.parseInt(sqlConnector.getQueryFirstElement(query));   
+        sqlConnector.deleteEventFromBase(transportID); // delete file from database       
+        JOptionPane.showMessageDialog(this, "Event deleted.");
+        if(!filterTextField.getText().isEmpty()) refreshItemList(filterTextField.getText());
+        else refreshItemList();    
+    }//GEN-LAST:event_deleteEventButtonActionPerformed
     public void refreshItemList() {
 
         String query;
@@ -816,6 +850,7 @@ public class MainPanel extends javax.swing.JPanel {
     private javax.swing.JButton RefreshButton;
     private javax.swing.JButton carrierButton;
     private javax.swing.JButton changePassButton;
+    private javax.swing.JButton deleteEventButton;
     private javax.swing.JButton eventCommentsButton;
     private javax.swing.JButton eventDocumentsButton;
     private javax.swing.JButton eventStatusButton;

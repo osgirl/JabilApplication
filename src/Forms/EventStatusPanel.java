@@ -231,42 +231,45 @@ public class EventStatusPanel extends javax.swing.JPanel {
             sqlConnector.addLogToTable("Status changed to: "+jComboBox1.getSelectedItem().toString(), MainPanel.userLogin, "", selectedEventID);
             JOptionPane.showMessageDialog(statusPanel, "Event Status Changed.");
             //REJECTED
-            if(jComboBox1.getSelectedItem().toString().contentEquals("Rejected")){
-                sendMailsToImpex("Rejected");
-                //sendMailsToBuyer("Rejected");  //ver.1.01   changed from 28-08-2014
-                if(userGroup.contentEquals("Impex")) sendMailsToBuyer("Rejected"); //ver.1.01   changed from 19-10-2014
-            }
-            //OPENED
-            if(jComboBox1.getSelectedItem().toString().contentEquals("Opened")){
-                sendMailsToBuyer("Opened");
-                if(userGroup.contentEquals("Courier")) sendMailsToImpex("Opened");
-            }
-            //CORRECT
-            if(jComboBox1.getSelectedItem().toString().contentEquals("Correct")){
-                sendMailsToImpex("Correct");
-                sendMailsToCustomsAgency("Correct");
-                sendMailsToBuyer("Correct");
-            }
-            //COMPLETED
-            if(jComboBox1.getSelectedItem().toString().contentEquals("Completed")){
-                sendMailsToCustomsAgency("Completed");
-            }
-            //REOPENED
-            //ver.1.01   new status added from 21-09-2014
-            if(jComboBox1.getSelectedItem().toString().contentEquals("Reopened")){                
-               if(userGroup.contentEquals("Impex")) sendMailsToBuyer("Reopened");//ver.1.01   changed from 19-10-2014
-            }
-            //NOTIFIED         
-            //ver.1.02   new status (Notified) added from 30-11-2014
-            if(jComboBox1.getSelectedItem().toString().contentEquals("Notified")){
-                if(userGroup.contentEquals("Courier")) sendMailsToImpex("Notified");
-                if(userGroup.contentEquals("Courier")) sendMailsToBuyer("Notified");
-            }
-            //AC         
-            //ver.1.02   new mail notifications for AC status added from 30-11-2014
-            if(jComboBox1.getSelectedItem().toString().contentEquals("AC")){
-                sendMailsToCourier("AC");
-                sendMailsToTransport("AC");
+            if (!userGroup.contentEquals("Admin"))
+            {
+                if(jComboBox1.getSelectedItem().toString().contentEquals("Rejected")){
+                    sendMailsToImpex("Rejected");
+                    //sendMailsToBuyer("Rejected");  //ver.1.01   changed from 28-08-2014
+                    if(userGroup.contentEquals("Impex")) sendMailsToBuyer("Rejected"); //ver.1.01   changed from 19-10-2014
+                }
+                //OPENED
+                if(jComboBox1.getSelectedItem().toString().contentEquals("Opened")){
+                    sendMailsToBuyer("Opened");
+                    if(userGroup.contentEquals("Courier")) sendMailsToImpex("Opened");
+                }
+                //CORRECT
+                if(jComboBox1.getSelectedItem().toString().contentEquals("Correct")){
+                    sendMailsToImpex("Correct");
+                    sendMailsToCustomsAgency("Correct");
+                    sendMailsToBuyer("Correct");
+                }
+                //COMPLETED
+                if(jComboBox1.getSelectedItem().toString().contentEquals("Completed")){
+                    sendMailsToCustomsAgency("Completed");
+                }
+                //REOPENED
+                //ver.1.01   new status added from 21-09-2014
+                if(jComboBox1.getSelectedItem().toString().contentEquals("Reopened")){                
+                   if(userGroup.contentEquals("Impex")) sendMailsToBuyer("Reopened");//ver.1.01   changed from 19-10-2014
+                }
+                //NOTIFIED         
+                //ver.1.02   new status (Notified) added from 30-11-2014
+                if(jComboBox1.getSelectedItem().toString().contentEquals("Notified")){
+                    if(userGroup.contentEquals("Courier")) sendMailsToImpex("Notified");
+                    if(userGroup.contentEquals("Courier")) sendMailsToBuyer("Notified");
+                }
+                //AC         
+                //ver.1.02   new mail notifications for AC status added from 30-11-2014
+                if(jComboBox1.getSelectedItem().toString().contentEquals("AC")){
+                    sendMailsToCourier("AC");
+                    sendMailsToTransport("AC");
+                }
             }
             statusPanel.setVisible(false);
             parentPanel.setVisible(true);

@@ -25,7 +25,7 @@ public class MailSender {
                         StringBuffer msg = new StringBuffer();
 			props.put("mail.smtp.host", M_HOST);
 			props.put("mail.smtp.user", M_USER);
-			props.put("mail.smtp.password", Cipher.mDecrypt(M_PASSWORD,msg));
+			props.put("mail.smtp.password", M_PASSWORD);
 			props.put("mail.smtp.port", M_PORT); // 587 is the port number of yahoo mail
 			props.put("mail.smtp.auth", "true");
 

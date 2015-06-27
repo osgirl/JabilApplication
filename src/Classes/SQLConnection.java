@@ -596,5 +596,20 @@ public class SQLConnection {
             //closeConnection();
         }
     }
+    public void deleteEventFromBase(int transportID)
+    {
+       try {
+            String query = "DELETE t.* FROM "+DBNAME+".Transports t WHERE t.ID ='"+transportID+"';";
+            //startConnection();
+            pst = con.prepareStatement(query);
+            pst.executeUpdate();
+            //closeConnection();
+        }
+        catch(Exception ex) {
+            System.out.println("Blad w deleteEventFromBase");
+            System.out.println(ex.getMessage());
+            //closeConnection();
+        } 
+    }
 }
 
