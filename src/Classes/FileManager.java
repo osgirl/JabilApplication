@@ -249,7 +249,7 @@ public class FileManager {
                 //break comma separated line using ";"
                 st = new StringTokenizer(strLine, ";");
                 String dataName=null,dataValue=null;
-                String dataDesc=null,dataActive=null,eMail = null;
+                String dataDesc=null,dataActive=null,eMail = null, masterUnit=null, masterUnitName=null;
                 
                 for (int i=0;i<5;i++) {
                     //display csv values
@@ -261,16 +261,31 @@ public class FileManager {
                         case 1: dataValue = token;break;
                         case 2: dataDesc = token;break;
                         case 3: dataActive = token;break;
-                        case 4: eMail = token;break;    
+                        case 4: eMail = token;break;
+                        case 5: masterUnit = token;break;
+                        case 6: masterUnitName = token;break;
                         
                     }
                 }
                 String query = "SELECT * FROM "+PropertiesClass.props.DB_NAME+".Vendor WHERE DataName='"+dataName+"';";
                 //check if vendor already exist in db
-                boolean dataActiveBool;
+                boolean dataActiveBool, masterUnitBool;
                 if(dataActive.contentEquals("1")||dataActive.contentEquals("true")) dataActiveBool=true; else dataActiveBool=false;
+                if(masterUnit.contentEquals("1")||masterUnit.contentEquals("true")) masterUnitBool=true; else masterUnitBool=false;
                 if(!sqlConnector.checkQueryAppearence(query)){
-                    sqlConnector.addItemToTable("Vendor",dataName,dataValue,dataDesc,dataActiveBool,eMail);
+                    sqlConnector.addItemToTable("Vendor",dataName,dataValue,dataDesc,dataActiveBool,eMail,masterUnitBool);
+                    if (masterUnitBool) 
+                    {
+                        query = "SELECT ID FROM "+PropertiesClass.props.DB_NAME+".Vendor WHERE DataName='"+dataName+"';";
+                        int vendorID = Integer.parseInt(sqlConnector.getQueryFirstElement(query));
+                        sqlConnector.updateTable("Vendor", dataName,dataName, dataValue, dataDesc, dataActiveBool, eMail, masterUnitBool, vendorID);
+                    }
+                    else  
+                    {
+                        query = "SELECT ID FROM "+PropertiesClass.props.DB_NAME+".Vendor WHERE DataName='"+masterUnitName+"';";
+                        int vendorID = Integer.parseInt(sqlConnector.getQueryFirstElement(query));
+                        sqlConnector.updateTable("Vendor", dataName,dataName, dataValue, dataDesc, dataActiveBool, eMail, masterUnitBool, vendorID);
+                    }
                     //sendMail(userID,BLNumber,PONumber, carrier, vendor, buyer);
                     bw.write(strLine+";Load successful!");
                     bw.newLine();

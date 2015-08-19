@@ -8,6 +8,7 @@ import Classes.FileManager;
 import Classes.PropertiesClass;
 import Classes.SQLConnection;
 import java.io.File;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -19,6 +20,7 @@ public class NewVendorPanel extends javax.swing.JPanel {
 
     public static NewVendorPanel newVendorPanel;
     SQLConnection sqlConnector;
+    String[] vendorNames;
     File file;
     /**
      * Creates new form NewVendorPanel
@@ -27,6 +29,7 @@ public class NewVendorPanel extends javax.swing.JPanel {
         initComponents();
         newVendorPanel = this;
         sqlConnector = SQLConnection.sqlConnector;
+        refreshItemList();
     }
 
     /**
@@ -51,6 +54,8 @@ public class NewVendorPanel extends javax.swing.JPanel {
         loadFromFileButton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
+        jCheckBox2 = new javax.swing.JCheckBox();
+        jComboBox1 = new javax.swing.JComboBox();
 
         setMaximumSize(new java.awt.Dimension(800, 600));
         setMinimumSize(new java.awt.Dimension(800, 600));
@@ -92,6 +97,15 @@ public class NewVendorPanel extends javax.swing.JPanel {
 
         jLabel4.setText("Vendor e-mail:");
 
+        jCheckBox2.setText("Master Unit");
+        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox2ActionPerformed(evt);
+            }
+        });
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -117,7 +131,12 @@ public class NewVendorPanel extends javax.swing.JPanel {
                             .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel3)
-                    .addComponent(jCheckBox1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jCheckBox2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jCheckBox1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(135, Short.MAX_VALUE))
         );
@@ -141,14 +160,30 @@ public class NewVendorPanel extends javax.swing.JPanel {
                     .addComponent(loadFromFileButton))
                 .addGap(10, 10, 10)
                 .addComponent(jCheckBox1)
+                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCheckBox2)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(269, Short.MAX_VALUE))
+                .addContainerGap(238, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+private void refreshItemList() {
 
+        
+        DefaultComboBoxModel vendorModel = new DefaultComboBoxModel();
+        String query = "SELECT DataName FROM "+PropertiesClass.props.DB_NAME+".Vendor WHERE DataActive ='1' AND MasterUnit ='1' ORDER BY DataName ASC ;";
+        vendorNames = sqlConnector.getQueryFirstColumn(query);       
+        for (String vendorName : vendorNames) {
+            vendorModel.addElement(vendorName);
+        }
+        jComboBox1.setModel(vendorModel);              
+        jComboBox1.setSelectedIndex(0);
+
+    }
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         newVendorPanel.setVisible(false);
         VendorPanel.vendorPanel.setVisible(true);
@@ -157,7 +192,19 @@ public class NewVendorPanel extends javax.swing.JPanel {
         String query = "SELECT * FROM "+PropertiesClass.props.DB_NAME+".Vendor WHERE DataName='"+jTextField1.getText()+"';";
         boolean check = sqlConnector.checkQueryAppearence(query);
         if(!check && !(jTextField1.getText().isEmpty())&& !(jTextField3.getText().isEmpty())){
-        sqlConnector.addItemToTable("Vendor", jTextField1.getText(), jTextField2.getText(), jTextArea1.getText(), jCheckBox1.isSelected(), jTextField3.getText());
+        sqlConnector.addItemToTable("Vendor", jTextField1.getText(), jTextField2.getText(), jTextArea1.getText(), jCheckBox1.isSelected(), jTextField3.getText(), jCheckBox2.isSelected());       
+        if (jCheckBox2.isSelected()) 
+        {
+            query = "SELECT ID FROM "+PropertiesClass.props.DB_NAME+".Vendor WHERE DataName='"+jTextField1.getText()+"';";
+            int vendorID = Integer.parseInt(sqlConnector.getQueryFirstElement(query));
+            sqlConnector.updateTable("Vendor", jTextField1.getText(),jTextField1.getText(), jTextField2.getText(), jTextArea1.getText(), jCheckBox1.isSelected(), jTextField3.getText(), jCheckBox2.isSelected(), vendorID);
+        }
+        else  
+        {
+            query = "SELECT MasterUnitId FROM "+PropertiesClass.props.DB_NAME+".Vendor WHERE DataName='"+jComboBox1.getSelectedItem().toString()+"';";
+            int vendorID = Integer.parseInt(sqlConnector.getQueryFirstElement(query));
+            sqlConnector.updateTable("Vendor", jTextField1.getText(),jTextField1.getText(), jTextField2.getText(), jTextArea1.getText(), jCheckBox1.isSelected(), jTextField3.getText(), jCheckBox2.isSelected(), vendorID);
+        }
         newVendorPanel.setVisible(false);
         VendorPanel.vendorPanel.setVisible(true);
         VendorPanel.vendorPanel.refreshItemList();
@@ -175,12 +222,20 @@ public class NewVendorPanel extends javax.swing.JPanel {
             fm.csvVendorReader(file);
             JOptionPane.showMessageDialog(newVendorPanel, "Data Loaded. Check \"*_report.csv\" file in loaded directory for more details.");
             VendorPanel.vendorPanel.refreshItemList();
+            }
     }//GEN-LAST:event_loadFromFileButtonActionPerformed
-    }
+    
+    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
+        
+        jComboBox1.setEnabled(!jCheckBox2.isSelected());
+    }//GEN-LAST:event_jCheckBox2ActionPerformed
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JButton cancelButton;
     private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jCheckBox2;
+    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

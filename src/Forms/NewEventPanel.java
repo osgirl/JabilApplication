@@ -70,7 +70,7 @@ public class NewEventPanel extends javax.swing.JPanel {
 
         jLabel2.setText("PONumber:");
 
-        jLabel3.setText("Vendor:");
+        jLabel3.setText("Ship From:");
 
         jLabel5.setText("Carrier:");
 
@@ -127,11 +127,12 @@ public class NewEventPanel extends javax.swing.JPanel {
                     .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(48, 48, 48)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
+                    .addComponent(jLabel4)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jTextField1)
@@ -152,7 +153,7 @@ public class NewEventPanel extends javax.swing.JPanel {
                         .addComponent(loadFromFileButton)
                         .addGap(21, 21, 21)
                         .addComponent(cancelButton)
-                        .addContainerGap())
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTextField1)
@@ -189,13 +190,12 @@ public class NewEventPanel extends javax.swing.JPanel {
         buyerFirstNames = sqlConnector.getQueryFirstColumn(query);
         query = "Select a.LastName from "+PropertiesClass.props.DB_NAME+".User a, "+PropertiesClass.props.DB_NAME+".Group b where a.Group_ID=b.ID AND b.DataName='Buyer' ORDER BY a.Login ASC;";
         buyerLastNames = sqlConnector.getQueryFirstColumn(query);
-        for (int i = 0; i < vendorNames.length; i++) {
-            vendorModel.addElement(vendorNames[i]);
+        for (String vendorName : vendorNames) {
+            vendorModel.addElement(vendorName);
         }
         jComboBox1.setModel(vendorModel);
-
-        for (int i = 0; i < carierNames.length; i++) {
-            carierModel.addElement(carierNames[i]);
+        for (String carierName : carierNames) {
+            carierModel.addElement(carierName);
         }
         jComboBox2.setModel(carierModel);
         for (int i = 0; i < buyerFirstNames.length; i++) {

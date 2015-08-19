@@ -6,6 +6,7 @@ package Forms;
 
 import Classes.PropertiesClass;
 import Classes.SQLConnection;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,6 +18,7 @@ public class EditVendorPanel extends javax.swing.JPanel {
     public static EditVendorPanel editVendorPanel;
     String selectedVendor;
     SQLConnection sqlConnector;
+    String[] vendorNames;
     /**
      * Creates new form NewVendorPanel
      */
@@ -25,7 +27,9 @@ public class EditVendorPanel extends javax.swing.JPanel {
         editVendorPanel = this;
         selectedVendor = vendor;
         sqlConnector = SQLConnection.sqlConnector;
+        refreshItemList();
         loadVendorDetails();
+        
     }
 
     /**
@@ -49,6 +53,8 @@ public class EditVendorPanel extends javax.swing.JPanel {
         cancelButton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
+        jCheckBox2 = new javax.swing.JCheckBox();
+        jComboBox1 = new javax.swing.JComboBox();
 
         setMaximumSize(new java.awt.Dimension(800, 600));
         setMinimumSize(new java.awt.Dimension(800, 600));
@@ -82,6 +88,15 @@ public class EditVendorPanel extends javax.swing.JPanel {
 
         jLabel4.setText("Vendor e-mail:");
 
+        jCheckBox2.setText("Master Unit");
+        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox2ActionPerformed(evt);
+            }
+        });
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -107,7 +122,11 @@ public class EditVendorPanel extends javax.swing.JPanel {
                             .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel3)
-                    .addComponent(jCheckBox1))
+                    .addComponent(jCheckBox1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jCheckBox2)
+                        .addGap(18, 18, 18)
+                        .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(70, 70, 70))
         );
         layout.setVerticalGroup(
@@ -133,11 +152,15 @@ public class EditVendorPanel extends javax.swing.JPanel {
                     .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jCheckBox1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(4, 4, 4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCheckBox2)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addGap(2, 2, 2)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(283, Short.MAX_VALUE))
+                .addContainerGap(259, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -145,22 +168,51 @@ public class EditVendorPanel extends javax.swing.JPanel {
         editVendorPanel.setVisible(false);
         VendorPanel.vendorPanel.setVisible(true);
     }//GEN-LAST:event_cancelButtonActionPerformed
+private void refreshItemList() {
 
+        
+        DefaultComboBoxModel vendorModel = new DefaultComboBoxModel();
+        String query = "SELECT DataName FROM "+PropertiesClass.props.DB_NAME+".Vendor WHERE DataActive ='1' AND MasterUnit ='1' ORDER BY DataName ASC ;";
+        vendorNames = sqlConnector.getQueryFirstColumn(query);       
+        for (String vendorName : vendorNames) {
+            vendorModel.addElement(vendorName);
+        }
+        jComboBox1.setModel(vendorModel);              
+        jComboBox1.setSelectedIndex(0);
+
+    }
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
 
         String query = "SELECT * FROM "+PropertiesClass.props.DB_NAME+".Vendor WHERE DataName='"+jTextField1.getText()+"';";
         boolean check = sqlConnector.checkQueryAppearence(query);
         if((!check || jTextField1.getText().contentEquals(selectedVendor)) && !(jTextField1.getText().isEmpty()) && !(jTextField3.getText().isEmpty())){
-        sqlConnector.updateTable("Vendor",selectedVendor, jTextField1.getText(), jTextField2.getText(), jTextArea1.getText(), jCheckBox1.isSelected(), jTextField3.getText());
+            if (jCheckBox2.isSelected()) 
+        {
+            query = "SELECT ID FROM "+PropertiesClass.props.DB_NAME+".Vendor WHERE DataName='"+selectedVendor+"';";
+            int vendorID = Integer.parseInt(sqlConnector.getQueryFirstElement(query));
+            sqlConnector.updateTable("Vendor", jTextField1.getText(),jTextField1.getText(), jTextField2.getText(), jTextArea1.getText(), jCheckBox1.isSelected(), jTextField3.getText(), jCheckBox2.isSelected(), vendorID);
+        }
+        else  
+        {
+            query = "SELECT MasterUnitId FROM "+PropertiesClass.props.DB_NAME+".Vendor WHERE DataName='"+jComboBox1.getSelectedItem().toString()+"';";
+            int vendorID = Integer.parseInt(sqlConnector.getQueryFirstElement(query));
+            sqlConnector.updateTable("Vendor", jTextField1.getText(),jTextField1.getText(), jTextField2.getText(), jTextArea1.getText(), jCheckBox1.isSelected(), jTextField3.getText(), jCheckBox2.isSelected(), vendorID);
+        }
         editVendorPanel.setVisible(false);
         VendorPanel.vendorPanel.setVisible(true);
         VendorPanel.vendorPanel.refreshItemList();
        }else JOptionPane.showMessageDialog(editVendorPanel, "Vendor name or email is empty or already exists! Chose new name or leave previous one.");
         
     }//GEN-LAST:event_editButtonActionPerformed
+
+    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
+        jComboBox1.setEnabled(!jCheckBox2.isSelected());
+    }//GEN-LAST:event_jCheckBox2ActionPerformed
     private void loadVendorDetails(){
        String query = "SELECT * FROM "+PropertiesClass.props.DB_NAME+".Vendor WHERE DataName = '"+selectedVendor+"';";
-        String[] vendorDetails = sqlConnector.getQueryFirstRow(query,8);
+        String[] vendorDetails = sqlConnector.getQueryFirstRow(query,10);
+        query = "SELECT DataName FROM "+PropertiesClass.props.DB_NAME+".Vendor WHERE ID = '"+vendorDetails[9]+"';";
+        String masterUnitName = sqlConnector.getQueryFirstElement(query);
         jTextField1.setText(vendorDetails[1]);
         jTextField2.setText(vendorDetails[2]);
         jTextField3.setText(vendorDetails[7]);
@@ -168,12 +220,23 @@ public class EditVendorPanel extends javax.swing.JPanel {
         if(vendorDetails[4].contentEquals("1")){
          jCheckBox1.setSelected(true);   
         }else jCheckBox1.setSelected(false);
+        if(vendorDetails[8].contentEquals("1")){
+         jCheckBox2.setSelected(true);
+         jComboBox1.setEnabled(false);
+        }else 
+        {
+            jCheckBox2.setSelected(false);
+            jComboBox1.setEnabled(true);
+            jComboBox1.setSelectedItem(masterUnitName);
+        }
         
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton editButton;
     private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jCheckBox2;
+    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

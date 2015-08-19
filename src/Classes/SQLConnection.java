@@ -368,10 +368,10 @@ public class SQLConnection {
             //closeConnection();
         }
     }
-    public void addItemToTable(String table,String dataName, String dataValue, String dataDescription, boolean dataActive, String email){
+    public void addItemToTable(String table,String dataName, String dataValue, String dataDescription, boolean dataActive, String email, boolean masterUnit){
         try {
 
-            String query = "INSERT INTO "+DBNAME+"."+table+" (`DataName`, `DataValue`, `DataDescription`, `DataActive`, `UpdatedBy`, `UpdatedDate`, `E-mail`) VALUES (?, ?, ?, ?, ?, NOW(), ?);";
+            String query = "INSERT INTO "+DBNAME+"."+table+" (`DataName`, `DataValue`, `DataDescription`, `DataActive`, `UpdatedBy`, `UpdatedDate`, `E-mail`, `MasterUnit`) VALUES (?, ?, ?, ?, ?, NOW(), ?,?);";
             //startConnection();
             pst = con.prepareStatement(query);
             pst.setString(1,dataName);
@@ -380,11 +380,12 @@ public class SQLConnection {
             pst.setBoolean(4,dataActive);
             pst.setString(5,Forms.MainPanel.userLogin);
             pst.setString(6,email);
+            pst.setBoolean(7, masterUnit);          
             pst.executeUpdate();
             //closeConnection();
         }
         catch(Exception ex) {
-            System.out.println("Blad w addItemToTable");
+            System.out.println("Blad w addItemToTable2");
             System.out.println(ex.getMessage());
             //closeConnection();
         }
@@ -427,10 +428,10 @@ public class SQLConnection {
             //closeConnection();
         }
     }
-    public void updateTable(String table,String selectedItem,String dataName, String dataValue, String dataDescription, boolean dataActive, String email){
+    public void updateTable(String table,String selectedItem,String dataName, String dataValue, String dataDescription, boolean dataActive, String email, boolean masterUnit, int masterUnitID){
         try {
 
-            String query = "UPDATE "+DBNAME+"."+table+" SET `DataName` = ?, `DataValue` = ?, `DataDescription` = ?, `DataActive` = ?, `UpdatedBy` = ?, `UpdatedDate` = NOW(), `E-mail` = ? WHERE DataName = ? ;";
+            String query = "UPDATE "+DBNAME+"."+table+" SET `DataName` = ?, `DataValue` = ?, `DataDescription` = ?, `DataActive` = ?, `UpdatedBy` = ?, `UpdatedDate` = NOW(), `E-mail` = ?,`MasterUnit` = ?, `MasterUnitId` = ?  WHERE DataName = ? ;";
             //startConnection();
             pst = con.prepareStatement(query);
             pst.setString(1,dataName);
@@ -439,7 +440,9 @@ public class SQLConnection {
             pst.setBoolean(4,dataActive);
             pst.setString(5,Forms.MainPanel.userLogin);
             pst.setString(6,email);
-            pst.setString(7,selectedItem);
+            pst.setBoolean(7, masterUnit);
+            pst.setInt(8, masterUnitID);
+            pst.setString(9,selectedItem);
             pst.executeUpdate();
             //closeConnection();
         }
